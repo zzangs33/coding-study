@@ -3,7 +3,7 @@ package com.coding.march.fifth;
 /**
  * @link https://programmers.co.kr/learn/courses/30/parts/12077
  */
-public interface ThisWeek {
+public interface Problem {
 
     String theNotFinished(String[] participant, String[] completion);
 

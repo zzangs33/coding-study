@@ -1,6 +1,6 @@
 package com.coding.march.fifth;
 
-public class Kms27420 implements ThisWeek {
+public class Kms27420 implements Problem {
     public static void main(String[] args) {
 
     }
