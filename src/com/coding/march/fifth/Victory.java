@@ -10,30 +10,27 @@ public class Victory implements Problem{
 
   @Override
   public String theNotFinished(String[] participant, String[] completion) {
-    Arrays.sort(participant);
-    Arrays.sort(completion);
+    HashMap<String, Integer> map = new HashMap<>();
 
-    int i = 0;
-    for(i=0; i<completion.length; i++) {
-      if(!completion[i].equals(participant[i])){
-        return participant[i];
-      }
+    for(String partiPerson : participant) {
+      Integer no = map.get(partiPerson);
+      map.put(partiPerson, no == null ? 1 : ++no);
     }
-    return participant[i];
+
+    for(String completePerson : completion) {
+      Integer no = map.get(completePerson);
+      if(no == null) return completePerson;
+      else if(no == 1) map.remove(completePerson);
+      else map.put(completePerson, --no);
+    }
+
+    return map.keySet().stream().findAny().get();
+
   }
 
   @Override
   public boolean telNumList(String[] phone_book) {
     boolean answer = true;
-    List<String> list =Arrays.asList(phone_book);
-    HashSet<String> set = new HashSet<>(list);
-    for(String number : list) {
-      if(set.stream().filter(no -> no.startsWith(number) && !no.equals(number))
-              .findFirst().isPresent()) {
-        answer = false;
-        return answer;
-      }
-    }
 
     return answer;
   }
