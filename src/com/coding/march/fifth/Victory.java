@@ -54,24 +54,38 @@ public class Victory implements Hashing {
 
   @Override
   public int camouflage(String[][] clothes) {
-    HashMap<String, List<String>> map = new HashMap<>();
+    HashMap<String, Integer> map = new HashMap<>();
 
     for(String[] StrArr: clothes) {
-      List<String> list = map.get(StrArr[1]);
-      if(list != null) {
-        List<String> newList = new ArrayList<>();
-        newList.add(StrArr[0]);
-        map.put(StrArr[1], newList);
+      String kinds = StrArr[1];
+      Integer no = map.get(kinds);
+      if(no == null) {
+        map.put(kinds, 1);
       } else {
-        list.add(StrArr[0]);
+        map.put(kinds, no+1);
       }
+
     }
+
     //TODO 경우의 수 계산
       return 0;
   }
 
   @Override
   public int[] bestAlbum(String[] genres, int[] plays) {
+    HashMap<String, Integer> map = new HashMap<>();
+
+    for(int i =0; i<genres.length; i++) {
+      String genre = genres[i];
+      Integer totalPlay = map.get(genre);
+      if(totalPlay == null) {
+        map.put(genre, plays[i]);
+      } else {
+        map.put(genre, totalPlay + plays[i]);
+      }
+    }
+
+
     return new int[0];
   }
 }
