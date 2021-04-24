@@ -1,6 +1,6 @@
 package com.coding.april.second;
 
-public class Victory implements Problem{
+public class Victory implements Heap {
     @Override
     public int hotter(int[] scoville, int K) {
         return 0;

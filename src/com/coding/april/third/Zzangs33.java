@@ -1,6 +1,6 @@
 package com.coding.april.third;
 
-public class Zzangs33 implements Problem {
+public class Zzangs33 implements Sorting {
     @Override
     public int[] kthNumber(int[] array, int[][] commands) {
         return new int[0];

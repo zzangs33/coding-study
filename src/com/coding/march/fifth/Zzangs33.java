@@ -3,7 +3,7 @@ package com.coding.march.fifth;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Zzangs33 implements Problem {
+public class Zzangs33 implements Hashing {
     public static void main(String[] args) {
 
     }

@@ -1,6 +1,6 @@
 package com.coding.april.third;
 
-public class Victory implements Problem {
+public class Victory implements Sorting {
     @Override
     public int[] kthNumber(int[] array, int[][] commands) {
         return new int[0];

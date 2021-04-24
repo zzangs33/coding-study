@@ -3,7 +3,7 @@ package com.coding.march.fifth;
 /**
  * @link https://programmers.co.kr/learn/courses/30/parts/12077
  */
-public interface Problem {
+public interface Hashing {
 
     String theNotFinished(String[] participant, String[] completion);
 

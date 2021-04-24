@@ -7,7 +7,7 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
-public class Victory implements Problem{
+public class Victory implements QueueNStack {
 
     @Override
     public int truckThroughBridge(int bridge_length, int weight, int[] truck_weights) {

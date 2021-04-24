@@ -1,9 +1,11 @@
 package com.coding.april.second;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class Zzangs33 implements Problem {
+public class Zzangs33 implements Heap {
     @Override
     public int hotter(int[] scoville, int K) {
         Queue<Integer> foods = new PriorityQueue<>();
@@ -25,11 +27,18 @@ public class Zzangs33 implements Problem {
 
     @Override
     public int diskController(int[][] jobs) {
+
+
         return 0;
     }
+
+
 
     @Override
     public int[] dualPriorityQueue(String[] operations) {
         return new int[0];
     }
+
+
+
 }

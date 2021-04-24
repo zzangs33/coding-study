@@ -3,7 +3,7 @@ package com.coding.april.forth;
 /**
  * @link https://programmers.co.kr/learn/courses/30/parts/12230
  */
-public interface Problem {
+public interface BruteForce {
     int[] virtualTest(int[] answers);
 
     int findPrimeNumber(String numbers);

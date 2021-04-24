@@ -1,6 +1,6 @@
 package com.coding.april.forth;
 
-public class Kms27420 implements Problem{
+public class Kms27420 implements BruteForce {
     @Override
     public int[] virtualTest(int[] answers) {
         return new int[0];

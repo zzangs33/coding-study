@@ -1,9 +1,8 @@
 package com.coding.march.fifth;
 
-import javax.print.DocFlavor;
 import java.util.*;
 
-public class Victory implements Problem{
+public class Victory implements Hashing {
 
   public static void main(String[] args) {
     Victory vic = new Victory();

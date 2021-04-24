@@ -1,6 +1,6 @@
 package com.coding.april.second;
 
-public class Kms27420 implements Problem{
+public class Kms27420 implements Heap {
     @Override
     public int hotter(int[] scoville, int K) {
         return 0;
