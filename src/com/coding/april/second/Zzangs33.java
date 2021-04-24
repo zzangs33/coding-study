@@ -1,11 +1,8 @@
 package com.coding.april.second;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
-public class Zzangs33 implements Problem {
+public class Zzangs33 implements Heap {
     public static void main(String[] args) {
         Zzangs33 zzangs33 = new Zzangs33();
         System.out.println(Arrays.toString(zzangs33.dualPriorityQueue(new String[]{"I 16", "D 1"})));
@@ -35,7 +32,31 @@ public class Zzangs33 implements Problem {
 
     @Override
     public int diskController(int[][] jobs) {
+        Queue<Job> waiting = new PriorityQueue<>((a, b) -> a.length <= b.length ? 1 : -1);
+        Queue<Job> orderByInserted = new PriorityQueue<>((a, b) -> a.start <= b.start ? 1 : -1);
+
+        for (int[] job : jobs) {
+            Job cur = new Job(job[0], job[1]);
+            orderByInserted.add(cur);
+        }
+
+        List<Integer> during = new ArrayList<>();
+        while (!(orderByInserted.isEmpty() && waiting.isEmpty())) {
+
+
+        }
+
+
         return 0;
+    }
+    private static class Job {
+        int start;
+        int length;
+
+        Job(int start, int length) {
+            this.start = start;
+            this.length = length;
+        }
     }
 
     @Override
@@ -73,4 +94,5 @@ public class Zzangs33 implements Problem {
             return new int[]{0, 0};
         }
     }
+
 }
