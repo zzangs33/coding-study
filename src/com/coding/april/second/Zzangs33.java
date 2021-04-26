@@ -1,6 +1,9 @@
 package com.coding.april.second;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class Zzangs33 implements Heap {
     public static void main(String[] args) {
@@ -32,20 +35,19 @@ public class Zzangs33 implements Heap {
 
     @Override
     public int diskController(int[][] jobs) {
-        Queue<Job> waiting = new PriorityQueue<>((a, b) -> a.length <= b.length ? 1 : -1);
-        Queue<Job> orderByInserted = new PriorityQueue<>((a, b) -> a.start <= b.start ? 1 : -1);
+        Queue<Job> jobQueue = new PriorityQueue<>((o1, o2) -> o1.length <= o2.length ? 1 : -1);
 
         for (int[] job : jobs) {
             Job cur = new Job(job[0], job[1]);
-            orderByInserted.add(cur);
+            jobQueue.add(cur);
         }
 
-        List<Integer> during = new ArrayList<>();
-        while (!(orderByInserted.isEmpty() && waiting.isEmpty())) {
-
+        int finished = 0;
+        int size = jobQueue.size();
+        while (!jobQueue.isEmpty()) {
+            Job cur = jobQueue.remove();
 
         }
-
 
         return 0;
     }
@@ -94,5 +96,4 @@ public class Zzangs33 implements Heap {
             return new int[]{0, 0};
         }
     }
-
 }
