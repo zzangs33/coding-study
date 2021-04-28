@@ -1,17 +1,14 @@
 package com.coding.april.second;
 
-import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Zzangs33 implements Heap {
     public static void main(String[] args) {
         Zzangs33 zzangs33 = new Zzangs33();
-        System.out.println(Arrays.toString(zzangs33.dualPriorityQueue(new String[]{"I 16", "D 1"})));
-        System.out.println(Arrays.toString(zzangs33.dualPriorityQueue(new String[]{"I 7", "I 5", "I -5", "D -1"})));
-        System.out.println(Arrays.toString(zzangs33.dualPriorityQueue(new String[]{"I 16", "I -5643", "D -1", "D 1", "D 1", "I 123", "D -1"})));
-        System.out.println(Arrays.toString(zzangs33.dualPriorityQueue(new String[]{"I -45", "I 653", "D 1", "I -642", "I 45", "I 97", "D 1", "D -1", "I 333"})));
+        System.out.println(zzangs33.diskController(new int[][]{{0, 3}, {1, 9}, {2, 6}}));
     }
 
     @Override
@@ -35,26 +32,41 @@ public class Zzangs33 implements Heap {
 
     @Override
     public int diskController(int[][] jobs) {
-        Queue<Job> jobQueue = new PriorityQueue<>((o1, o2) -> o1.length <= o2.length ? 1 : -1);
-
+        Queue<Job> beforeStart = new PriorityQueue<>(Comparator.comparingInt(o -> o.start));
         for (int[] job : jobs) {
-            var cur = new Job(job[0], job[1]);
-            jobQueue.add(cur);
+            Job cur = new Job(job[0], job[1]);
+            beforeStart.add(cur);
         }
 
-        int finished = 0;
-        int size = jobQueue.size();
-        while (!jobQueue.isEmpty()) {
-            Job cur = jobQueue.remove();
+        Queue<Job> waiting = new PriorityQueue<>(Comparator.comparingInt(o -> o.length));
+        Queue<Job> finished = new LinkedList<>();
 
+        int time = 0;
+        while (!(beforeStart.isEmpty() && waiting.isEmpty())) {
+            if (!beforeStart.isEmpty()) {
+                Job beforeFirst = beforeStart.peek();
+                if (time <= beforeFirst.start && waiting.isEmpty()) time = beforeFirst.start;
+
+                while (!beforeStart.isEmpty() && beforeStart.peek().start <= time) {
+                    waiting.add(beforeStart.remove());
+                }
+            }
+
+
+            Job waitingFirst = waiting.remove();
+            time += waitingFirst.length;
+            waitingFirst.finish = time;
+
+            finished.add(waitingFirst);
         }
 
-        return 0;
+        return (int) finished.stream().mapToInt(j -> j.finish - j.start).average().getAsDouble();
     }
 
     private static class Job {
         int start;
         int length;
+        int finish;
 
         Job(int start, int length) {
             this.start = start;
