@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Zzangs33 implements Problem {
+public class Zzangs33 implements QueueNStack {
     @Override
     public int truckThroughBridge(int bridge_length, int weight, int[] truck_weights) {
         Queue<Integer> onBridge = new LinkedList<>();

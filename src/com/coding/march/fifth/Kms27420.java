@@ -2,7 +2,7 @@ package com.coding.march.fifth;
 
 import java.util.*;
 
-public class Kms27420 implements Problem {
+public class Kms27420 implements Hashing {
     public static void main(String[] args) {
         System.out.println(
                 Arrays.toString(new Kms27420().bestAlbum(
@@ -26,7 +26,8 @@ public class Kms27420 implements Problem {
                 else nameCntMap.remove(name);
             }
         }
-        return nameCntMap.keySet().stream().findFirst().orElseThrow();
+//        return nameCntMap.keySet().stream().findFirst().orElseThrow();
+        return null;
     }
 
     @Override

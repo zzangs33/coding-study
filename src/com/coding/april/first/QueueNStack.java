@@ -3,7 +3,7 @@ package com.coding.april.first;
 /**
  * @link https://programmers.co.kr/learn/courses/30/parts/12081
  */
-public interface Problem {
+public interface QueueNStack {
     int truckThroughBridge(int bridge_length, int weight, int[] truck_weights);
 
     int[] stockValue(int[] prices);

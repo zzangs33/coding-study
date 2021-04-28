@@ -1,6 +1,6 @@
 package com.coding.april.first;
 
-public class Kms27420 implements Problem {
+public class Kms27420 implements QueueNStack {
     @Override
     public int truckThroughBridge(int bridge_length, int weight, int[] truck_weights) {
         return 0;
