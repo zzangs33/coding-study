@@ -38,7 +38,7 @@ public class Zzangs33 implements Heap {
         Queue<Job> jobQueue = new PriorityQueue<>((o1, o2) -> o1.length <= o2.length ? 1 : -1);
 
         for (int[] job : jobs) {
-            Job cur = new Job(job[0], job[1]);
+            var cur = new Job(job[0], job[1]);
             jobQueue.add(cur);
         }
 
@@ -51,6 +51,7 @@ public class Zzangs33 implements Heap {
 
         return 0;
     }
+
     private static class Job {
         int start;
         int length;
@@ -63,12 +64,12 @@ public class Zzangs33 implements Heap {
 
     @Override
     public int[] dualPriorityQueue(String[] operations) {
-        Queue<Integer> maxQueue = new PriorityQueue<>();
-        Queue<Integer> minQueue = new PriorityQueue<>(Comparator.reverseOrder());
+        Queue<Integer> maxQueue = new PriorityQueue<>(Comparator.reverseOrder());
+        Queue<Integer> minQueue = new PriorityQueue<>();
 
         for (String operation : operations) {
             char op = operation.charAt(0);
-            int val = Integer.parseInt(operation.replaceAll("\\D", ""));
+            int val = Integer.parseInt(operation.substring(operation.indexOf(' ') + 1));
 
             if (op == 'I') {
                 maxQueue.add(val);
@@ -96,4 +97,5 @@ public class Zzangs33 implements Heap {
             return new int[]{0, 0};
         }
     }
+
 }
