@@ -11,5 +11,5 @@ public interface Problem {
 
     int camouflage(String[][] clothes);
 
-     int[] bestAlbum(String[] genres, int[] plays);
+    int[] bestAlbum(String[] genres, int[] plays);
 }
