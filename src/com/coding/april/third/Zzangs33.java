@@ -7,10 +7,7 @@ import java.util.List;
 public class Zzangs33 implements Sorting {
     public static void main(String[] args) {
         Zzangs33 zzangs33 = new Zzangs33();
-
-//        System.out.println(Arrays.toString(zzangs33.kthNumber(new int[]{1, 5, 2, 6, 3, 7, 4}, new int[][]{{2, 5, 3}, {4, 4, 1}, {1, 7, 3}})));
-//        System.out.println(zzangs33.theBiggestNumber(new int[]{6, 10, 2}));
-//        System.out.println(zzangs33.theBiggestNumber(new int[]{3, 30, 34, 5, 9}));
+        System.out.println(zzangs33.hIndex(new int[]{0, 1, 1}));
 
     }
 
@@ -54,6 +51,18 @@ public class Zzangs33 implements Sorting {
 
     @Override
     public int hIndex(int[] citations) {
+        List<Integer> list = new ArrayList<>();
+
+        for (int num : citations) list.add(num);
+        list.sort(Comparator.reverseOrder());
+
+        if (list.get(0) == 0) return 0;
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) < i) return Math.min(list.get(i - 1), i);
+        }
+        if (list.get(list.size() - 1) >= list.size()) return list.size();
+
         return 0;
     }
 }
