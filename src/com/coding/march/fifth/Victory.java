@@ -2,11 +2,26 @@ package com.coding.march.fifth;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Victory implements Hashing {
 
   public static void main(String[] args) {
     Victory vic = new Victory();
+//    System.out.println(Arrays.toString(IntStream.of(new int[]{3,1,2,4}).map(i-> {
+////      System.out.println(++i);
+//      return ++i;
+//    }).toArray()));
+//    System.out.println(reuslt);
+    vic.camouflage(new String[][]{
+            {"yellow_hat", "headgear"},
+            {"bluesunglasses", "eyewear"},
+            {"green_turban","headgear"},
+            {"red_skirt", "pants"},
+            {"jean", "pants"},
+            {"slacks", "pants"},
+            {"grandma","face"},
+            {"grandfa", "face"}});
 //    vic.telNumList(new String[]{"123", "456", "789"});
 //    vic.bestAlbum(new String[]{"classic", "pop", "classic", "classic", "pop"},new int[]{500, 600, 150, 800, 2500});
   }
@@ -53,8 +68,18 @@ public class Victory implements Hashing {
     return answer;
 
 
-  }
+//시간 초과 예제제
+//   boolean answer = true;
+//    for(int i =0; i<phone_book.length-1; i++) {
+//      for(int j=i+1; j< phone_book.length; j++) {
+//        if(phone_book[i].startsWith(phone_book[j])) return false;
+//        if(phone_book[j].startsWith(phone_book[i])) return false;
+//      }
+//    }
+//    return answer;
 
+  }
+  int totalCnt = 0;
   @Override
   public int camouflage(String[][] clothes) {
     HashMap<String, Integer> map = new HashMap<>();
@@ -62,16 +87,46 @@ public class Victory implements Hashing {
     for(String[] StrArr: clothes) {
       String kinds = StrArr[1];
       Integer no = map.get(kinds);
-      if(no == null) {
-        map.put(kinds, 1);
-      } else {
-        map.put(kinds, no+1);
-      }
-
+      map.put(kinds, no == null ? 1 : no +1);
     }
 
-    //TODO 경우의 수 계산
-      return 0;
+    System.out.println("map :" + map.toString());
+
+    List<Integer> numList = new ArrayList<>(map.values());
+
+    for(int i=1; i<=numList.size(); i++) {
+        int[] arr = numList.stream().mapToInt(no->no).toArray();
+        combination(arr, new boolean[arr.length], 0, i);  //1번 예제 시간 초과....
+    }
+
+      return totalCnt;
+  }
+
+  public void combination(int[] arr, boolean[] visited, int depth, int remainNo) {
+    if(remainNo == 0) {
+      System.out.println("arr : " + Arrays.toString(arr) +  " : " +Arrays.toString(visited));
+      totalCnt += calculate(arr, visited);
+      return;
+    }
+    if(depth == arr.length) {
+      return;
+    }
+    else {
+      visited[depth] = true;
+      combination(arr, visited, depth+1, remainNo-1);
+
+      visited[depth] = false;
+      combination(arr, visited, depth+1, remainNo);
+    }
+  };
+
+  public int calculate(int[] arr, boolean[] visited) {
+    int temp = 1;
+    for(int i=0; i<arr.length; i++) {
+      temp *= visited[i] ? arr[i] : 1;
+    }
+    System.out.println("calculate : " + temp);
+    return temp;
   }
 
   @Override
@@ -119,14 +174,13 @@ public class Victory implements Hashing {
     }
 
     List<Genre> sortedGenreList = map.values().stream().sorted(
-            (genre1, genre2) -> -Integer.compare(genre1.totalPlay, genre2.totalPlay)
+            (genre1, genre2) -> genre2.totalPlay - genre1.totalPlay // 내림차순
     ).collect(Collectors.toList());
 
 
     List<Integer> resultList = new ArrayList<>();
 
     for(Genre sortedGenre : sortedGenreList) {
-      System.out.println("sortedGenre : " + sortedGenre.toString());
       Song theFirst = sortedGenre.theFirst;;
       Song theSecond = sortedGenre.theSecond;
 
@@ -144,7 +198,6 @@ public class Victory implements Hashing {
     Song theFirst = null;
     Song theSecond = null;
 
-    Genre() { }
     Genre(int totalPlay, Song theFirst) {
       this.totalPlay = totalPlay;
       this.theFirst = theFirst;
@@ -160,7 +213,6 @@ public class Victory implements Hashing {
     }
   }
   class Song {
-    Song () {};
     Song(int playNumber, int index) {
       this.playNumber = playNumber;
       this.index = index;
