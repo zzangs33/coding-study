@@ -26,8 +26,7 @@ public class Kms27420 implements Hashing {
                 else nameCntMap.remove(name);
             }
         }
-//        return nameCntMap.keySet().stream().findFirst().orElseThrow();
-        return null;
+        return nameCntMap.keySet().stream().findFirst().orElseThrow(NullPointerException::new);
     }
 
     @Override
