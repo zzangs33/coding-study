@@ -1,9 +1,11 @@
 package com.coding.april.third;
 
+import com.coding.TestCaseExe;
+
 /**
  * @link https://programmers.co.kr/learn/courses/30/parts/12198
  */
-public interface Sorting {
+public interface Sorting extends TestCaseExe {
     int[] kthNumber(int[] array, int[][] commands);
 
     String theBiggestNumber(int[] numbers);

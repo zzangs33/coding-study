@@ -1,6 +1,16 @@
 package com.coding.april.second;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 public class Kms27420 implements Heap {
+    public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        Kms27420 instance = new Kms27420();
+        instance.exe("hotter");
+        instance.exe("diskController");
+        instance.exe("dualPriorityQueue");
+    }
+
     @Override
     public int hotter(int[] scoville, int K) {
         return 0;

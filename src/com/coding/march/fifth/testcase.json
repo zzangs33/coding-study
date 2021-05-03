@@ -1,0 +1,19 @@
+{
+  "theNotFinished": [
+    [["leo", "kiki", "eden"], ["eden", "kiki"]],
+    [["marina", "josipa", "nikola", "vinko", "filipa"], ["josipa", "filipa", "marina", "nikola"]	],
+    [["mislav", "stanko", "mislav", "ana"], ["stanko", "ana", "mislav"]]
+  ],
+  "telNumList": [
+    [["119", "97674223", "1195524421"]	],
+    [["123","456","789"]],
+    [["12","123","1235","567","88"]]
+  ],
+  "camouflage": [
+    [[["yellowhat", "headgear"], ["bluesunglasses", "eyewear"], ["green_turban", "headgear"]]],
+    [[["crowmask", "face"], ["bluesunglasses", "face"], ["smoky_makeup", "face"]]]
+  ],
+  "bestAlbum": [
+    [["classic", "pop", "classic", "classic", "pop"], [500, 600, 150, 800, 2500]]
+  ]
+}

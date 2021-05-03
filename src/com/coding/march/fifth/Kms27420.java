@@ -1,15 +1,16 @@
 package com.coding.march.fifth;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class Kms27420 implements Hashing {
-    public static void main(String[] args) {
-        System.out.println(
-                Arrays.toString(new Kms27420().bestAlbum(
-                        new String[]{"classic", "pop", "classic", "classic", "pop"},
-                        new int[]{500, 600, 150, 800, 2500}
-                ))
-        );
+    public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        Kms27420 instance = new Kms27420();
+        instance.exe("theNotFinished");
+        instance.exe("telNumList");
+        instance.exe("camouflage");
+        instance.exe("bestAlbum");
     }
 
     @Override

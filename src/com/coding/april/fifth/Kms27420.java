@@ -1,6 +1,19 @@
 package com.coding.april.fifth;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 public class Kms27420 implements Greedy {
+    public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        Kms27420 instance = new Kms27420();
+        instance.exe("gymSuit");
+        instance.exe("joyStick");
+        instance.exe("makeABigNumber");
+        instance.exe("lifeboat");
+        instance.exe("linkingIslands");
+        instance.exe("speedTrap");
+    }
+
     @Override
     public int gymSuit(int n, int[] lost, int[] reserve) {
         return 0;

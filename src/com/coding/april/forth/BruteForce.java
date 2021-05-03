@@ -1,9 +1,11 @@
 package com.coding.april.forth;
 
+import com.coding.TestCaseExe;
+
 /**
  * @link https://programmers.co.kr/learn/courses/30/parts/12230
  */
-public interface BruteForce {
+public interface BruteForce extends TestCaseExe {
     int[] virtualTest(int[] answers);
 
     int findPrimeNumber(String numbers);

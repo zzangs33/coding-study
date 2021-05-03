@@ -1,6 +1,16 @@
 package com.coding.april.third;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 public class Kms27420 implements Sorting {
+    public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        Kms27420 instance = new Kms27420();
+        instance.exe("kthNumber");
+        instance.exe("theBiggestNumber");
+        instance.exe("hIndex");
+    }
+
     @Override
     public int[] kthNumber(int[] array, int[][] commands) {
         return new int[0];
