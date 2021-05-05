@@ -1,10 +1,7 @@
 package com.coding.april.fifth;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
 public class Kms27420 implements Greedy {
-    public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public static void main(String[] args) {
         Kms27420 instance = new Kms27420();
         instance.exe("gymSuit");
         instance.exe("joyStick");

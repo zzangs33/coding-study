@@ -1,10 +1,7 @@
 package com.coding.april.third;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
 public class Kms27420 implements Sorting {
-    public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public static void main(String[] args) {
         Kms27420 instance = new Kms27420();
         instance.exe("kthNumber");
         instance.exe("theBiggestNumber");

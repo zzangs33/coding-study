@@ -1,11 +1,9 @@
 package com.coding.march.fifth;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class Kms27420 implements Hashing {
-    public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public static void main(String[] args) {
         Kms27420 instance = new Kms27420();
         instance.exe("theNotFinished");
         instance.exe("telNumList");
