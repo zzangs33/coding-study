@@ -21,7 +21,7 @@ public class Kms27420 implements QueueNStack {
                 passCnt += 1;
             }
             if (i < truck_weights.length) {
-                item = truck_weights[9];
+                item = truck_weights[i];
                 if (item + totalWeight <= weight) {
                     queue.add(new Info(item, tick + bridge_length));
                     totalWeight += item;
