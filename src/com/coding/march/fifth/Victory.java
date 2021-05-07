@@ -8,22 +8,17 @@ public class Victory implements Hashing {
 
   public static void main(String[] args) {
     Victory vic = new Victory();
-//    System.out.println(Arrays.toString(IntStream.of(new int[]{3,1,2,4}).map(i-> {
-////      System.out.println(++i);
-//      return ++i;
-//    }).toArray()));
-//    System.out.println(reuslt);
-    vic.camouflage(new String[][]{
-            {"yellow_hat", "headgear"},
-            {"bluesunglasses", "eyewear"},
-            {"green_turban","headgear"},
-            {"red_skirt", "pants"},
-            {"jean", "pants"},
-            {"slacks", "pants"},
-            {"grandma","face"},
-            {"grandfa", "face"}});
+//    vic.camouflage(new String[][]{
+//            {"yellow_hat", "headgear"},
+//            {"bluesunglasses", "eyewear"},
+//            {"green_turban","headgear"},
+//            {"red_skirt", "pants"},
+//            {"jean", "pants"},
+//            {"slacks", "pants"},
+//            {"grandma","face"},
+//            {"grandfa", "face"}});
 //    vic.telNumList(new String[]{"123", "456", "789"});
-//    vic.bestAlbum(new String[]{"classic", "pop", "classic", "classic", "pop"},new int[]{500, 600, 150, 800, 2500});
+    vic.bestAlbum(new String[]{"classic", "pop", "classic", "classic", "pop"},new int[]{500, 600, 150, 800, 2500});
   }
 
 
@@ -42,6 +37,7 @@ public class Victory implements Hashing {
       else if(no == 1) map.remove(completePerson);
       else map.put(completePerson, --no);
     }
+    //완료 한 애를 먼저 때려넣고 parti 하면 result를 stream 안해도 됨.
 
     return map.keySet().stream().findAny().get();
 
@@ -59,7 +55,7 @@ public class Victory implements Hashing {
       for(int i=0; i< phone.length(); i++) {
         buffer.append(phone.charAt(i));
 
-        if(set.contains(buffer.toString())) {
+        if(set.contains(buffer.toString())) { // HashSet이어서 그렇다고 함. 랜덤 접근이 가능해서 성능이 좋음.
           return false;
         };
       }
@@ -172,11 +168,13 @@ public class Victory implements Hashing {
         map.put(genre, newGenre);
       }
     }
+    System.out.println("map : " +  map.toString());
 
     List<Genre> sortedGenreList = map.values().stream().sorted(
             (genre1, genre2) -> genre2.totalPlay - genre1.totalPlay // 내림차순
     ).collect(Collectors.toList());
 
+    System.out.println(sortedGenreList);
 
     List<Integer> resultList = new ArrayList<>();
 

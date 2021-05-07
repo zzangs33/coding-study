@@ -1,13 +1,18 @@
 package com.coding.april.first;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
 public class Victory implements QueueNStack {
+
+    public static void main(String[] args) {
+        Victory vic = new Victory();
+//        vic.exe("developModule");
+        vic.exe("truckThroughBridge");
+//        System.out.println(Arrays.toString(vic.developModule()))
+//        System.out.println((int) Math.ceil(((10-3)/ 3f)));
+    }
 
     @Override
     public int truckThroughBridge(int bridge_length, int weight, int[] truck_weights) {
@@ -21,7 +26,7 @@ public class Victory implements QueueNStack {
 
         while(passedTrucks.size() < truck_weights.length) {
             if(bridgeQ.peek() == 0) {
-                bridgeQ.poll();
+                bridgeQ.remove();
             } else {
                 totalWeight = totalWeight - bridgeQ.peek();
                 passedTrucks.add(bridgeQ.poll());
@@ -69,35 +74,28 @@ public class Victory implements QueueNStack {
 
     @Override
     public int[] developModule(int[] progresses, int[] speeds) {
-        int[] days = new int[progresses.length];
-        for(int i=0; i<progresses.length; i++) {
-            days[i] = (int) Math.ceil((double)(100-progresses[i]) / speeds[i]);
+        Queue<Integer> schedulesQ = new LinkedList<>();
+        List<Integer> resultList = new ArrayList<>();
+        for(int i=0; i < progresses.length; i++) {
+            schedulesQ.add((int) Math.ceil((100-progresses[i]) / (float) speeds[i]));
         }
 
-        List<Integer> countList = new ArrayList<>();
-        int cnt = 1;
-        outer : for(int i = 0; i < days.length; i++ ) {
-            if(i == days.length-1) {
-                countList.add(cnt);
-                break ;
+        int count = 1;
+        Integer first = schedulesQ.poll();
+        while(!schedulesQ.isEmpty()) {
+            Integer theNext = schedulesQ.peek();
+            if(first >= theNext) {
+                count += 1;
+                schedulesQ.remove();
+            } else {
+                resultList.add(count);
+                first = schedulesQ.poll();
+                count = 1;
             }
-            for(int j=i+1; j < days.length; j++) {
-                if(days[i] >= days[j]) {
-                    cnt ++;
-                    if(j == days.length-1) {
-                        countList.add(cnt);
-                        break outer;
-                    }
-                } else {
-                    countList.add(cnt);
-                    i=j-1;
-                    cnt = 1;
-                    break;
-                }
-            } // inner
-        } // outer
+        }
+        resultList.add(count);
 
-        return countList.stream().mapToInt(i->i).toArray();
+        return resultList.stream().mapToInt(i->i).toArray();
     }
 
     @Override
@@ -111,7 +109,6 @@ public class Victory implements QueueNStack {
             for(int item : q) {
                 if(max <item) max = item;
             }
-
             if(q.peek() != max) {
                 q.offer(q.poll());
                 if(location == 0) location = q.size() -1;
