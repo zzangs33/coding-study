@@ -9,7 +9,7 @@ public class Victory implements QueueNStack {
     public static void main(String[] args) {
         Victory vic = new Victory();
 //        vic.exe("developModule");
-        vic.exe("truckThroughBridge");
+        vic.exe("stockValue");
 //        System.out.println(Arrays.toString(vic.developModule()))
 //        System.out.println((int) Math.ceil(((10-3)/ 3f)));
     }
@@ -49,27 +49,29 @@ public class Victory implements QueueNStack {
     @Override
     public int[] stockValue(int[] prices) {
         int length = prices.length;
-        int[] answer = new int[length];
+
+        Queue<Integer> answer = new LinkedList<>();
 
         for(int i=0; i<length-1;i++) {
-            int cnt = 0;
+            Integer cnt = 0;
 
             for(int j=i+1; j<length;j++) {
                 if(prices[i] <= prices[j]) {
                     cnt++;
                     if(j == length-1) {
-                        answer[i] = cnt;
+                        answer.add(cnt);
                         break;
                     }
                 } else {
                     cnt++;
-                    answer[i] = cnt;
+                    answer.add(cnt);
                     break;
                 }
             } // inner
         } // outer
 
-        return answer;
+        if(answer.size() != length) answer.add(0);
+        return answer.stream().mapToInt(i-> i).toArray();
     }
 
     @Override
