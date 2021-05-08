@@ -1,14 +1,17 @@
 package com.coding.april.first;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Kms27420 implements QueueNStack {
     public static void main(String[] args) {
         Kms27420 instance = new Kms27420();
 //        instance.exe("truckThroughBridge");
 //        instance.exe("stockValue");
-        instance.exe("developModule");
-//        instance.exe("printer");
+//        instance.exe("developModule");
+        instance.exe("printer");
     }
 
     @Override
@@ -69,11 +72,42 @@ public class Kms27420 implements QueueNStack {
 
     @Override
     public int[] developModule(int[] progresses, int[] speeds) {
-        return new int[0];
+        List<Integer> result = new ArrayList<>();
+        int preDays = Integer.MAX_VALUE, days, rest, speed, cnt = 0;
+        for (int i = 0; i < progresses.length; i++) {
+            rest = 100 - progresses[i];
+            speed = speeds[i];
+            days = rest / speed;
+            if (rest * speed != days) days += 1;
+            if (days <= preDays) {
+                if (preDays == Integer.MAX_VALUE)
+                    preDays = days;
+                cnt += 1;
+            } else {
+                result.add(cnt);
+                preDays = days;
+                cnt = 1;
+            }
+        }
+        result.add(cnt);
+        return result.stream().mapToInt(i -> i).toArray();
     }
 
     @Override
     public int printer(int[] priorities, int location) {
-        return 0;
+        int answer = 0;
+        int[] sorted = Arrays.copyOf(priorities, priorities.length);
+        Arrays.sort(sorted);
+        int popIdx = 0;
+        int ckIdx = sorted.length - 1;
+        while (answer < priorities.length) {
+            if (priorities[popIdx] > 0 && priorities[popIdx] == sorted[ckIdx]) {
+                ckIdx--;
+                answer++;
+                if (popIdx == location) break;
+            }
+            popIdx = popIdx + 1 >= priorities.length ? 0 : popIdx + 1;
+        }
+        return answer;
     }
 }
