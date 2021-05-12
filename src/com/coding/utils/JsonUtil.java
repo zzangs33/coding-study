@@ -1,10 +1,12 @@
 package com.coding.utils;
 
+import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class JsonUtil {
     private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("\"yyyy-MM-dd HH:mm:ss\"");
@@ -69,9 +71,11 @@ public class JsonUtil {
         return builder.toString();
     }
 
-    public static Object parse(String source) {
-        if (source == null || source.isEmpty()) return null;
-        if (source.matches("^\".*\"$")) {
+    public static Object parse(String source) throws ParseException {
+        if (source == null) return null;
+        source = source.trim();
+        if (source.isEmpty()) return null;
+        if (source.matches("^\"(.|\n|\r)*\"$")) {
             source = source.substring(1, source.length() - 1);
             if (source.matches("^[0-9]{4}[-.][0-9]{2}[-.][0-9]{2}([ :,.][0-2][0-9][ :][0-5][0-9][ :][0-5][0-9])?$"))
                 try {
@@ -89,7 +93,7 @@ public class JsonUtil {
                 }
             return source;
         }
-        if (source.matches("^\\{.*}$") || source.matches("^\\[.*]$")) {
+        if (source.matches("^\\{(.|\n|\r)*}$") || source.matches("^\\[(.|\n|\r)*]$")) {
             boolean isObj = source.charAt(0) == '{';
             Map<String, Object> obj = isObj ? new HashMap<>() : null;
             List<Object> list = !isObj ? new ArrayList<>() : null;
@@ -112,7 +116,7 @@ public class JsonUtil {
                             openIdx = -1;
                             openCnt = 0;
                             char next = source.charAt(i + 1);
-                            while (next == ' ' || next == ':') {
+                            while (Character.isWhitespace(next) || next == ':') {
                                 next = source.charAt(++i + 1);
                             }
                         }
@@ -131,7 +135,7 @@ public class JsonUtil {
                         }
                         Object val = parse(source.substring(openIdx, i + 1));
                         if (next != null)
-                            while (next == ',' || next == ' ') {
+                            while (next == ',' || Character.isWhitespace(next)) {
                                 next = source.charAt(++i + 1);
                             }
                         if (obj != null) obj.put(key, val);
@@ -152,7 +156,7 @@ public class JsonUtil {
                             else list.add(val);
                             try {
                                 char next = source.charAt(i + 1);
-                                while (next == ',' || next == ' ') {
+                                while (next == ',' || Character.isWhitespace(next)) {
                                     next = source.charAt(++i + 1);
                                 }
                             } catch (StringIndexOutOfBoundsException e) {
@@ -172,6 +176,22 @@ public class JsonUtil {
         } catch (NumberFormatException e) {
             throw new ParseException("Invalid format. source: " + source, e);
         }
+    }
+
+    public static Object parse(Reader reader) throws IOException, NullPointerException, ParseException {
+        try (BufferedReader br = reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader)) {
+            return parse(br.lines().collect(Collectors.joining()));
+        }
+    }
+
+    public static Object parse(InputStream inputStream) throws IOException, NullPointerException, ParseException {
+        return parse(new InputStreamReader(inputStream));
+    }
+
+    public static Object parse(Class<?> sourceClz, String classPath) throws IOException, NullPointerException, ParseException {
+        InputStream is = sourceClz.getResourceAsStream(classPath);
+        if (is == null) throw new FileNotFoundException("classPath: " + classPath);
+        return parse(is);
     }
 
     public static final class ParseException extends RuntimeException {

@@ -3,13 +3,14 @@ package com.coding;
 import com.coding.utils.CastUtil;
 import com.coding.utils.JsonUtil;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public interface TestCaseExe {
     default void exe(String methodName) throws TestCaseRuntimeException {
@@ -17,15 +18,10 @@ public interface TestCaseExe {
             Method[] methods = this.getClass().getMethods();
             if (methods.length == 0) throw new NoSuchMethodException();
 
-            List<Object> testCaseList;
-            InputStream is = this.getClass().getResourceAsStream("./testcase.json");
-            if (is == null) throw new FileNotFoundException("File name: testcase.json");
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-                Map<String, Object> testCaseMap = (Map<String, Object>) JsonUtil.parse(br.lines().collect(Collectors.joining()));
-                testCaseList = (List<Object>) testCaseMap.get(methodName);
-                if (testCaseList.isEmpty())
-                    throw new FileNotFoundException("Cannot find the test cases from the testcase.json file.");
-            }
+            Map<String, Object> testCaseMap = (Map<String, Object>) JsonUtil.parse(this.getClass(), "./testcase.json");
+            List<Object> testCaseList = (List<Object>) testCaseMap.get(methodName);
+            if (testCaseList.isEmpty())
+                throw new FileNotFoundException("Cannot find the test cases from the testcase.json file.");
 
             int no = 1;
             for (Object item : testCaseList) {
