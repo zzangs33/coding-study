@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 public interface TestCaseExe {
     default void exe(String methodName) throws TestCaseRuntimeException {
+        StringBuilder logBuilder = new StringBuilder();
         try {
             List<Method> methodList = new ArrayList<>();
             for (Method method : this.getClass().getMethods())
@@ -37,9 +38,6 @@ public interface TestCaseExe {
             for (Object item : testCaseList) {
                 List<Object> testCase = item instanceof List ? (List<Object>) item : new ArrayList<>();
                 if (!(item instanceof List)) testCase.add(item);
-                long exeTime = 0;
-                Object result = null;
-                List<Object> arguments = null;
                 for (Method method : methodList) {
                     Class<?>[] paramTypes = method.getParameterTypes();
                     if (paramTypes.length == testCase.size()) {
@@ -52,28 +50,32 @@ public interface TestCaseExe {
                             e.printStackTrace();
                         }
                         if (args.size() == paramTypes.length) {
+                            if (no == 1)
+                                logBuilder
+                                        .append("------------------------------------").append('\n')
+                                        .append("The test cases of the method \"").append(methodName).append('\"').append('\n');
+                            logBuilder
+                                    .append("# Test case ").append(no++).append('\n')
+                                    .append("- Arguments: ").append(JsonUtil.stringify(args)).append('\n');
                             long start = System.currentTimeMillis();
-                            result = method.invoke(this, args.toArray());
-                            exeTime = System.currentTimeMillis() - start;
-                            arguments = args;
+                            Object result = method.invoke(this, args.toArray());
+                            long exeTime = System.currentTimeMillis() - start;
+                            logBuilder
+                                    .append("- result: ").append(JsonUtil.stringify(result)).append('\n')
+                                    .append("- execution time: ").append(exeTime).append(" ms").append('\n')
+                                    .append(no == testCaseList.size() + 1 ? "------------------------------------" : "").append('\n');
                             break;
                         }
                     }
                 }
-                if (arguments == null) throw new NoSuchMethodException();
-                if (no == 1)
-                    System.out.println("------------------------------------\nThe test cases of the method \"" + methodName + "\"");
-                System.out.println("# Test case " + no++);
-                System.out.println("- Arguments: " + JsonUtil.stringify(arguments));
-                System.out.println("- result: " + JsonUtil.stringify(result));
-                System.out.println("- execution time: " + exeTime + " ms");
-                if (no == testCaseList.size() + 1) System.out.println("------------------------------------\n");
-                else System.out.println();
+                if (logBuilder.length() == 0) throw new NoSuchMethodException();
             }
         } catch (InvocationTargetException e) {
             throw new TestCaseRuntimeException(e.getCause());
         } catch (Exception e) {
             throw new TestCaseRuntimeException(e);
+        } finally {
+            if (logBuilder.length() > 0) System.out.println(logBuilder);
         }
     }
 }
