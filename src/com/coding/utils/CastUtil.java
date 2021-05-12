@@ -10,7 +10,7 @@ public class CastUtil {
     private CastUtil() {
     }
 
-    public static Object cast(Object obj, Class<?> type) {
+    public static Object cast(Object obj, Class<?> type) throws ClassCastException {
         if (obj == null) return null;
         if (isBasicType(type)) {
             if (type.equals(obj.getClass()) || !isJavaBasicType(type)) return type.cast(obj);
