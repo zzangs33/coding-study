@@ -9,13 +9,16 @@ import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public interface TestCaseExe {
     default void exe(String methodName) throws TestCaseRuntimeException {
         try {
-            Method[] methods = this.getClass().getMethods();
+            Method[] methods = Arrays.stream(this.getClass().getMethods())
+                    .filter(m -> methodName.equals(m.getName()))
+                    .toArray(Method[]::new);
             if (methods.length == 0) throw new NoSuchMethodException();
 
             Map<String, Object> testCaseMap = (Map<String, Object>) JsonUtil.parse(this.getClass(), "./testcase.json");
@@ -31,8 +34,8 @@ public interface TestCaseExe {
                     Class<?>[] paramTypes = method.getParameterTypes();
                     if (paramTypes.length == testCase.size()) {
                         List<Object> args = new ArrayList<>();
-                        int i = 0;
                         try {
+                            int i = 0;
                             for (Object arg : testCase)
                                 args.add(CastUtil.cast(arg, paramTypes[i++]));
                         } catch (ClassCastException e) {
