@@ -73,6 +73,7 @@ public class JsonUtil {
     }
 
     public static Object parse(String source) throws ParseException {
+        String origin = source;
         if (source == null) return null;
         source = source.trim();
         if (source.isEmpty()) return null;
@@ -94,7 +95,7 @@ public class JsonUtil {
                     String ss = source.substring(12);
                     return dateFormatter.parse('"' + yyyy + '-' + MM + '-' + dd + ' ' + HH + ':' + mm + ':' + ss + '"').getTime();
                 } catch (java.text.ParseException e) {
-                    throw new ParseException("Cannot parse the date format. source: " + source, e);
+                    throw new ParseException("Cannot parse the date format. source: " + origin, e);
                 }
             return source;
         }
@@ -124,7 +125,7 @@ public class JsonUtil {
                     boolean isOpenChar = c == '[' || c == '{' || c == '"';
                     boolean isAvailableChar = c >= '0' && c <= '9' || c == '-' || c == 't' || c == 'f' || c == 'n';
                     if (!isOpenChar && !isAvailableChar)
-                        throw new ParseException("Invalid format. source: " + source);
+                        throw new ParseException("Invalid format. source: " + origin);
                     openIdx = i;
                     if (isOpenChar) {
                         closeChar = c == '[' ? ']' : c == '{' ? '}' : '"';
@@ -138,7 +139,7 @@ public class JsonUtil {
                             try {
                                 val = parse(source.substring(openIdx, (i += 3) + 1));
                             } catch (StringIndexOutOfBoundsException e) {
-                                throw new ParseException("Invalid format. rest of source: " + source.substring(openIdx));
+                                throw new ParseException("Invalid format. source: " + origin);
                             }
                         i = findBeforeNext(source, i, next -> Character.isWhitespace(next) || next == ',');
                         if (obj != null) obj.put(key, val);
@@ -169,7 +170,7 @@ public class JsonUtil {
             if (source.indexOf('.') > -1) return Double.parseDouble(source);
             return Long.parseLong(source);
         } catch (NumberFormatException e) {
-            throw new ParseException("Invalid format. source: " + source, e);
+            throw new ParseException("Invalid format. source: " + origin, e);
         }
     }
 
