@@ -32,7 +32,6 @@ public interface TestCaseExe {
                 if (!(item instanceof List)) testCase.add(item);
                 boolean executed = false;
                 for (Method method : methods) {
-                    System.out.println("method length: " + methods.length);
                     Class<?>[] paramTypes = method.getParameterTypes();
                     if (paramTypes.length == testCase.size()) {
                         List<Object> args = new ArrayList<>();
