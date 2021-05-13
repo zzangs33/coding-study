@@ -30,6 +30,7 @@ public interface TestCaseExe {
             for (Object item : testCaseList) {
                 List<Object> testCase = item instanceof List ? (List<Object>) item : new ArrayList<>();
                 if (!(item instanceof List)) testCase.add(item);
+                boolean executed = false;
                 for (Method method : methods) {
                     Class<?>[] paramTypes = method.getParameterTypes();
                     if (paramTypes.length == testCase.size()) {
@@ -65,10 +66,12 @@ public interface TestCaseExe {
                                             .append(no == testCaseList.size() + 1 ? "------------------------------------" : "").append('\n');
                                     System.out.print(logWriter);
                                 }
+                                executed = true;
                                 break;
                             }
                     }
                 }
+                if (!executed) throw new NoSuchMethodException();
             }
         } catch (Exception e) {
             throw new TestCaseRuntimeException(e);
