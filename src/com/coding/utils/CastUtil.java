@@ -50,7 +50,7 @@ public class CastUtil {
         return type.cast(list);
     }
 
-    private static boolean isJavaBasicType(Object objOrClz) {
+    public static boolean isJavaBasicType(Object objOrClz) {
         if (objOrClz == null) return false;
         return instanceOf(objOrClz, int.class) ||
                 instanceOf(objOrClz, char.class) ||
@@ -61,7 +61,7 @@ public class CastUtil {
                 instanceOf(objOrClz, boolean.class);
     }
 
-    private static boolean isBasicType(Object objOrClz) {
+    public static boolean isBasicType(Object objOrClz) {
         if (objOrClz == null) return false;
         return isJavaBasicType(objOrClz) ||
                 instanceOf(objOrClz, Number.class) ||
@@ -72,7 +72,7 @@ public class CastUtil {
                 instanceOf(objOrClz, TemporalAccessor.class);
     }
 
-    private static boolean instanceOf(Object objOrClz, Object superObjOrClz) {
+    public static boolean instanceOf(Object objOrClz, Object superObjOrClz) {
         if (objOrClz == null || superObjOrClz == null) return false;
         Class<?> clz = objOrClz instanceof Class ? (Class) objOrClz : objOrClz.getClass();
         Class<?> superClz = superObjOrClz instanceof Class ? (Class) superObjOrClz : superObjOrClz.getClass();

@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class JsonUtil {
@@ -16,12 +17,12 @@ public class JsonUtil {
 
     public static String stringify(Object obj) {
         if (obj == null) return "null";
-        if (obj instanceof Number || obj instanceof Boolean) return obj.toString();
-        if (obj instanceof String) return "\"" + obj + "\"";
         if (obj instanceof Date || obj instanceof TemporalAccessor) {
             if (obj instanceof Date) return dateFormatter.format((Date) obj);
             return dateFormatter.format(obj);
         }
+        if (obj instanceof CharSequence) return "\"" + obj + "\"";
+        if (CastUtil.isBasicType(obj)) return obj + "";
         if (obj.getClass().isArray()) {
             List<Object> list = new ArrayList<>();
             int length = Array.getLength(obj);
@@ -75,7 +76,11 @@ public class JsonUtil {
         if (source == null) return null;
         source = source.trim();
         if (source.isEmpty()) return null;
-        if (source.matches("^\"(.|\n|\r)*\"$")) {
+        boolean isLengthBiggerThanOne = source.length() > 1;
+        char firstChar = source.charAt(0), lastChar = source.charAt(source.length() - 1);
+        boolean isString = isLengthBiggerThanOne && firstChar == '"' && lastChar == '"';
+        boolean isObject = isLengthBiggerThanOne && (firstChar == '{' && lastChar == '}' || firstChar == '[' && lastChar == ']');
+        if (isString) {
             source = source.substring(1, source.length() - 1);
             if (source.matches("^[0-9]{4}[-.][0-9]{2}[-.][0-9]{2}([ :,.][0-2][0-9][ :][0-5][0-9][ :][0-5][0-9])?$"))
                 try {
@@ -93,7 +98,7 @@ public class JsonUtil {
                 }
             return source;
         }
-        if (source.matches("^\\{(.|\n|\r)*}$") || source.matches("^\\[(.|\n|\r)*]$")) {
+        if (isObject) {
             boolean isObj = source.charAt(0) == '{';
             Map<String, Object> obj = isObj ? new HashMap<>() : null;
             List<Object> list = !isObj ? new ArrayList<>() : null;
@@ -101,12 +106,9 @@ public class JsonUtil {
             String key = null;
             int openIdx = -1, openCnt = 0;
             char closeChar = ' ';
-            boolean ignore = false;
             for (int i = 0; i < source.length(); i++) {
                 char c = source.charAt(i);
-                if (ignore) ignore = false;
-                else if (c == '\\') ignore = true;
-                else if (isObj && key == null) {
+                if (isObj && key == null) {
                     if (c == '"') {
                         if (openCnt == 0) {
                             openIdx = i;
@@ -115,37 +117,35 @@ public class JsonUtil {
                             key = source.substring(openIdx + 1, i);
                             openIdx = -1;
                             openCnt = 0;
-                            char next = source.charAt(i + 1);
-                            while (Character.isWhitespace(next) || next == ':') {
-                                next = source.charAt(++i + 1);
-                            }
+                            i = findBeforeNext(source, i, next -> Character.isWhitespace(next) || next == ':');
                         }
                     }
                 } else if (openIdx == -1) {
+                    boolean isOpenChar = c == '[' || c == '{' || c == '"';
+                    boolean isAvailableChar = c >= '0' && c <= '9' || c == '-' || c == 't' || c == 'f' || c == 'n';
+                    if (!isOpenChar && !isAvailableChar)
+                        throw new ParseException("Invalid format. source: " + source);
                     openIdx = i;
-                    if (c >= '0' && c <= '9' || c == '-') {
-                        Character next = null;
-                        try {
-                            next = source.charAt(i + 1);
-                            while (next >= '0' && next <= '9' || next == '.') {
-                                next = source.charAt(++i + 1);
+                    if (isOpenChar) {
+                        closeChar = c == '[' ? ']' : c == '{' ? '}' : '"';
+                        openCnt = 1;
+                    } else {
+                        Object val;
+                        if (c >= '0' && c <= '9' || c == '-') {
+                            i = findBeforeNext(source, i, next -> next >= '0' && next <= '9' || next == '.');
+                            val = parse(source.substring(openIdx, i + 1));
+                        } else
+                            try {
+                                val = parse(source.substring(openIdx, (i += 3) + 1));
+                            } catch (StringIndexOutOfBoundsException e) {
+                                throw new ParseException("Invalid format. rest of source: " + source.substring(openIdx));
                             }
-                        } catch (StringIndexOutOfBoundsException e) {
-                            i = source.length() - 1;
-                        }
-                        Object val = parse(source.substring(openIdx, i + 1));
-                        if (next != null)
-                            while (next == ',' || Character.isWhitespace(next)) {
-                                next = source.charAt(++i + 1);
-                            }
+                        i = findBeforeNext(source, i, next -> Character.isWhitespace(next) || next == ',');
                         if (obj != null) obj.put(key, val);
                         else list.add(val);
 
                         openIdx = -1;
                         key = null;
-                    } else {
-                        closeChar = c == '[' ? ']' : c == '{' ? '}' : '"';
-                        openCnt = 1;
                     }
                 } else {
                     if (c == closeChar) {
@@ -154,14 +154,7 @@ public class JsonUtil {
                             Object val = parse(source.substring(openIdx, i + 1));
                             if (obj != null) obj.put(key, val);
                             else list.add(val);
-                            try {
-                                char next = source.charAt(i + 1);
-                                while (next == ',' || Character.isWhitespace(next)) {
-                                    next = source.charAt(++i + 1);
-                                }
-                            } catch (StringIndexOutOfBoundsException e) {
-                                i = source.length() - 1;
-                            }
+                            i = findBeforeNext(source, i, next -> Character.isWhitespace(next) || next == ',');
                             openIdx = -1;
                             key = null;
                         }
@@ -170,6 +163,8 @@ public class JsonUtil {
             }
             return isObj ? obj : list;
         }
+        if ("true".equals(source)) return true;
+        if ("false".equals(source)) return false;
         try {
             if (source.indexOf('.') > -1) return Double.parseDouble(source);
             return Long.parseLong(source);
@@ -197,6 +192,22 @@ public class JsonUtil {
     public static final class ParseException extends RuntimeException {
         private ParseException(String msg, Throwable cause) {
             super(msg, cause);
+        }
+
+        private ParseException(String msg) {
+            super(msg);
+        }
+    }
+
+    private static int findBeforeNext(String source, int start, Function<Character, Boolean> exclude) {
+        try {
+            char next = source.charAt(start + 1);
+            while (exclude.apply(next)) {
+                next = source.charAt(++start + 1);
+            }
+            return start;
+        } catch (StringIndexOutOfBoundsException e) {
+            return source.length() - 1;
         }
     }
 }
