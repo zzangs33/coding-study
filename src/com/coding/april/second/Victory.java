@@ -1,17 +1,13 @@
 package com.coding.april.second;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Victory implements Heap {
 
-    int fi;
     public static void main(String[] args) {
         Victory vic = new Victory();
-        vic.exe("hotter");
+        vic.exe("diskController");
     }
     @Override
     public int hotter(int[] scoville, int K) {
@@ -35,7 +31,40 @@ public class Victory implements Heap {
 
     @Override
     public int diskController(int[][] jobs) {
+        Queue<Integer> answerQ = new PriorityQueue<>();
+        List<Task> taskList = new ArrayList<>();
+        for(int i=0; i<jobs.length; i++) {
+            int[] taskArr = jobs[i];
+            taskList.add(new Task(taskArr[0], i, taskArr[1]));
+        }
+        taskList.sort((t1, t2) -> t1.request - t2.request);
+        System.out.println(taskList);
         return 0;
+    }
+
+    private static class Task {
+        Task(){};
+        Task(int request, int index, int duration) {
+            this.request = request;
+            this.index = index;
+            this.duration = duration;
+        }
+        int request;
+        int index;
+        int duration;
+        int start;
+        int end;
+
+        @Override
+        public String toString() {
+            return "Task{" +
+                    "request=" + request +
+                    ", index=" + index +
+                    ", duration=" + duration +
+                    ", start=" + start +
+                    ", end=" + end +
+                    '}';
+        }
     }
 
     @Override
