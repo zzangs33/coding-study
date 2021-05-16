@@ -3,7 +3,7 @@ package com.coding.april.fifth;
 import com.coding.TestCaseExe;
 
 /**
- * @link https://programmers.co.kr/learn/courses/30/parts/12244
+ * @link "https://programmers.co.kr/learn/courses/30/parts/12244"
  */
 public interface Greedy extends TestCaseExe {
     int gymSuit(int n, int[] lost, int[] reserve);

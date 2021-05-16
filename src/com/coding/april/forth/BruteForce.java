@@ -3,7 +3,7 @@ package com.coding.april.forth;
 import com.coding.TestCaseExe;
 
 /**
- * @link https://programmers.co.kr/learn/courses/30/parts/12230
+ * @link "https://programmers.co.kr/learn/courses/30/parts/12230"
  */
 public interface BruteForce extends TestCaseExe {
     int[] virtualTest(int[] answers);

@@ -3,7 +3,7 @@ package com.coding.march.fifth;
 import com.coding.TestCaseExe;
 
 /**
- * @link https://programmers.co.kr/learn/courses/30/parts/12077
+ * @link "https://programmers.co.kr/learn/courses/30/parts/12077"
  */
 public interface Hashing extends TestCaseExe {
 
