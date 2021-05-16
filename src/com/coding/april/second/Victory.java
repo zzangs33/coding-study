@@ -51,7 +51,7 @@ public class Victory implements Heap {
             answer += next.request + next.end;
             before = next;
         }
-        answerQ.offer(answer);
+        answerQ.offer(answer/jobs.length);
         return answerQ.remove();
 
     }
