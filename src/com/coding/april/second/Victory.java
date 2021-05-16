@@ -7,7 +7,8 @@ public class Victory implements Heap {
 
     public static void main(String[] args) {
         Victory vic = new Victory();
-        vic.exe("diskController");
+//        System.out.println(new PriorityQueue<Integer>());
+        vic.exe("dualPriorityQueue");
     }
     @Override
     public int hotter(int[] scoville, int K) {
@@ -90,6 +91,40 @@ public class Victory implements Heap {
 
     @Override
     public int[] dualPriorityQueue(String[] operations) {
-        return new int[0];
+        Queue<Integer> q = new PriorityQueue<>();
+        for(String op : operations) {
+            Integer number = Integer.valueOf(op.split(" ")[1]);
+            if(op.contains("I")) {
+                q.add(number);
+            } else {
+                if(q.isEmpty()) continue;
+                if(number < 0) q.remove();
+                else q = removeMax(q);
+
+            }
+        }
+        Integer min = getMin(q);
+        return q.isEmpty() ? new int[]{0,0} : new int[] {getMax(q), min};
+    }
+
+    private Queue<Integer> removeMax(Queue<Integer> q) {
+        Queue<Integer> newQ = new PriorityQueue<>();
+        while(!q.isEmpty()) {
+            if(q.size() == 1) return newQ;
+            newQ.add(q.remove());
+        }
+        return newQ;
+    }
+
+    private Integer getMin(Queue<Integer> q) {
+        return q.peek();
+    }
+
+    private Integer getMax(Queue<Integer> q) {
+        while (!q.isEmpty()) {
+            if(q.size() == 1) return q.remove();
+            else q.remove();
+        }
+        return -1;
     }
 }
