@@ -33,14 +33,35 @@ public class Victory implements Heap {
     public int diskController(int[][] jobs) {
         Queue<Integer> answerQ = new PriorityQueue<>();
         List<Task> taskList = new ArrayList<>();
+        //들어온 순서대로 add
         for(int i=0; i<jobs.length; i++) {
             int[] taskArr = jobs[i];
             taskList.add(new Task(taskArr[0], i, taskArr[1]));
         }
         taskList.sort((t1, t2) -> t1.request - t2.request);
         System.out.println(taskList);
-        return 0;
+
+        Task before = taskList.get(0);
+        int answer = before.duration + before.request;
+        //들어온 순서대로 실행시켜서 계산
+        for(int i=1; i<taskList.size(); i++) {
+            Task next = taskList.get(i);
+            next.start = before.duration + before.request;
+            next.end = next.start + next.duration;
+            answer += next.request + next.end;
+            before = next;
+        }
+        answerQ.offer(answer);
+        return answerQ.remove();
+
     }
+//
+//        ---------------------
+//            -------
+//       -----------------
+//      --
+//    ---
+//   -----
 
     private static class Task {
         Task(){};

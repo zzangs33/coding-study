@@ -20,7 +20,7 @@ public class Victory implements QueueNStack {
         List<Integer> passedTrucks = new ArrayList<>();
         Queue<Integer> bridgeQ = new LinkedBlockingQueue<>(
                 Arrays.stream(new int[bridge_length]).boxed().collect(Collectors.toList()));
-        List<Integer> trucksList = Arrays.stream(truck_weights).boxed().collect(Collectors.toList());
+        List<Integer> trucksList = Arrays.stream(truck_weights).boxed().collect(Collectors.toList());  //Queue 로 해도 될듯
 
         int totalWeight = 0;
 
@@ -37,7 +37,7 @@ public class Victory implements QueueNStack {
                     bridgeQ.offer(trucksList.get(0));
                     totalWeight += trucksList.remove(0);
                 } else {
-                    bridgeQ.offer(0);
+                    bridgeQ.offer(0); // 0을 안 넣는 로직으로는?
                 }
             }
 
@@ -48,6 +48,7 @@ public class Victory implements QueueNStack {
 
     @Override
     public int[] stockValue(int[] prices) {
+        //TODO // stack 으로 생각해볼까?
         int length = prices.length;
 
         Queue<Integer> answer = new LinkedList<>();
