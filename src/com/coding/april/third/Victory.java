@@ -1,9 +1,6 @@
 package com.coding.april.third;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Victory implements Sorting {
@@ -11,7 +8,7 @@ public class Victory implements Sorting {
     public static void main(String[] args) {
         Victory vic = new Victory();
 //        System.out.println(Arrays.toString("6223".toCharArray()));
-        vic.exe("theBiggestNumber");
+        vic.exe("hIndex");
     }
     @Override
     public int[] kthNumber(int[] array, int[][] commands) {
@@ -61,6 +58,22 @@ public class Victory implements Sorting {
 
     @Override
     public int hIndex(int[] citations) {
-        return 0;
+        List<Integer> list = new ArrayList<>();
+        for(int no : citations) list.add(no);
+
+        Collections.sort(list, Comparator.reverseOrder());
+        System.out.println(" list" + list);
+        Integer before = list.get(0);
+        if(before == 0) return 0;
+        if(list.size() > 1) {
+            for(int i= 1; i<list.size(); i++) {
+                Integer after = list.get(i);
+                if(after == i) return after;
+                if(after == i+1) return after;
+                if(after < i) return i;
+            }
+            return 0;
+        } else
+            return before == 1 ? before : 0;
     }
 }
