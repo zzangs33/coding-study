@@ -61,19 +61,22 @@ public class Victory implements Sorting {
         List<Integer> list = new ArrayList<>();
         for(int no : citations) list.add(no);
 
-        Collections.sort(list, Comparator.reverseOrder());
-        System.out.println(" list" + list);
+        list.sort(Comparator.reverseOrder());
+        System.out.println(" list : " + list);
         Integer before = list.get(0);
         if(before == 0) return 0;
         if(list.size() > 1) {
             for(int i= 1; i<list.size(); i++) {
                 Integer after = list.get(i);
-                if(after == i) return after;
-                if(after == i+1) return after;
+                if(after == 0) return list.get(i-1) != 1 ? 0 : 1;  // [2,0]
+                if(after == i || after == i+1) {
+                    return after;
+
+                }
                 if(after < i) return i;
             }
             return 0;
         } else
-            return before == 1 ? before : 0;
+            return before == 1 ? before : 0; // [1]
     }
 }
