@@ -5,13 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Zzangs33 implements Sorting {
-    public static void main(String[] args) {
-        Zzangs33 zzangs33 = new Zzangs33();
-        System.out.println(zzangs33.hIndex(new int[]{0, 1, 1}));
-
-    }
-
-
     @Override
     public int[] kthNumber(int[] array, int[][] commands) {
         List<Integer> list = new ArrayList<>();
@@ -33,20 +26,15 @@ public class Zzangs33 implements Sorting {
 
     @Override
     public String theBiggestNumber(int[] numbers) {
-        List<Integer> list = new ArrayList<>();
+        List<String> list = new ArrayList<>();
 
-        for (int num : numbers) list.add(num);
-        list.sort((a, b) -> {
-            String s1 = a + Integer.toString(b);
-            String s2 = b + Integer.toString(a);
-
-            return -s1.compareTo(s2);
-        });
+        for (int num : numbers) list.add(String.valueOf(num));
+        list.sort((a, b) -> Integer.parseInt(a + b) - Integer.parseInt(b + a));
 
         StringBuilder sb = new StringBuilder();
-        for (int num : list) sb.append(num);
+        for (String num : list) sb.append(num);
 
-        return list.get(0) == 0 ? "0" : sb.toString();
+        return list.get(0).equals("0") ? "0" : sb.toString();
     }
 
     @Override
@@ -61,8 +49,6 @@ public class Zzangs33 implements Sorting {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i) < i) return Math.min(list.get(i - 1), i);
         }
-        if (list.get(list.size() - 1) >= list.size()) return list.size();
-
-        return 0;
+        return list.size();
     }
 }
