@@ -69,10 +69,8 @@ public class Victory implements Sorting {
             for(int i= 1; i<list.size(); i++) {
                 Integer after = list.get(i);
                 if(after == 0) return list.get(i-1) != 1 ? 0 : 1;  // [2,0]
-                if(after == i || after == i+1) {
+                if(after == i || after == i+1)
                     return after;
-
-                }
                 if(after < i) return i;
             }
             return 0;
