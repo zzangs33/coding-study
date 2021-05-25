@@ -73,7 +73,7 @@ public class Victory implements Sorting {
                     return after;
                 if(after < i) return i;
             }
-            return 0;
+            return citations.length; // 예제 한번 생각해보긔!
         } else
             return before == 1 ? before : 0; // [1]
     }

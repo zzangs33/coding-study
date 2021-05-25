@@ -1,9 +1,35 @@
 package com.coding.april.forth;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Victory implements BruteForce {
     @Override
     public int[] virtualTest(int[] answers) {
-        return new int[0];
+        int[] a = {1, 2, 3, 4, 5};
+        int[] b = {2, 1, 2, 3, 2, 4, 2, 5};
+        int[] c = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+        int aCnt = 0;
+        int bCnt = 0;
+        int cCnt = 0;
+        for(int i=0; i<answers.length; i++) {
+            int answer = answers[i];
+            if(answer == a[i%a.length]) {aCnt++;}
+            if(answer == b[i%b.length]) {bCnt++;}
+            if(answer == c[i%c.length]) {cCnt++;}
+        }
+
+//        int maxScore = Math.max(aCnt, Math.max(bCnt, cCnt));
+
+        int maxScore = aCnt >= bCnt ? (aCnt >= cCnt ? aCnt : cCnt) : (bCnt>= cCnt ? bCnt : cCnt);
+
+
+        List<Integer> list = new ArrayList<>();
+        if(maxScore == aCnt) {list.add(1);}
+        if(maxScore == bCnt) {list.add(2);}
+        if(maxScore == cCnt) {list.add(3);}
+
+        return list.stream().mapToInt(i->i).toArray();
     }
 
     @Override
