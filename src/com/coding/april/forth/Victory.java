@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Victory implements BruteForce {
+
+    public static void main(String[] args) {
+        Victory vic = new Victory();
+        vic.exe("carpet");
+    }
     @Override
     public int[] virtualTest(int[] answers) {
         int[] a = {1, 2, 3, 4, 5};
@@ -39,6 +44,15 @@ public class Victory implements BruteForce {
 
     @Override
     public int[] carpet(int brown, int yellow) {
-        return new int[0];
+        int total = brown + yellow;
+        int height = 3;
+        int width;
+        while(true) {
+            if((total % height) == 0) {
+                width = total / height;
+                if((width-2) * (height-2) == yellow) return new int[]{width, height};
+            }
+            height++;
+        }
     }
 }
