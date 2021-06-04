@@ -1,6 +1,7 @@
 package com.coding.april.fifth;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Victory implements Greedy {
@@ -11,35 +12,35 @@ public class Victory implements Greedy {
     }
     @Override
     public int gymSuit(int n, int[] lost, int[] reserve) {
-        List<Integer> reserveList = new ArrayList<>();
-        List<Integer> lostList = new ArrayList<>();
+        int answer = n; // 3
+        int[] students = new int[n+2]; // [0, 1, -1, 2, 0]
+        final int firstIdx = 1;
+        for(int no : reserve) students[no] = 2;
+        for(int no : lost) students[no]--;
 
-        for (int no : reserve) reserveList.add(no);
-        for (int no : lost) {
-            if(reserveList.contains(no)) reserveList.remove((Integer) no);
-            else lostList.add(no);
-        }
-        System.out.println("1st lostList :" + lostList);
-        System.out.println("1st reserveList :" + reserveList);
-        List<Boolean> canDoPhy = new ArrayList<>();
 
-        boolean alreadyChange = false;
-        for(Integer no : lostList) {
-            if(reserveList.size() == 0) break;
-            if(reserveList.contains(no-1)) {
-                canDoPhy.add(true);
-                reserveList.remove(reserveList.indexOf(no-1));
+        System.out.println("1st : " + Arrays.toString(students));
+        for(int no = firstIdx; no <= n; no ++) {
+            if(students[no] != 0) {
+                if(students[no] == -1 && students[no+1] >= 1) {
+                    students[no] = 0;
+                    students[no+1] = students[no+1] == 2 ? 0: -1;
+                } else if(students[no+1] == -1) {
+                    if(students[no] == 2) {
+                        students[no] = 0;
+                        students[no+1] = 0;
+                    } else if(students[no] == 1) {
+                        students[no] = students[no-1] == 2? 0 : -1;
+                        students[no+1] = 0;
+                    }
+                }
             }
-            if(reserveList.size() >0 && reserveList.contains(no+1)) {
-                canDoPhy.add(true);
-                reserveList.remove(reserveList.indexOf(no+1));
-            }
-            else canDoPhy.add(false);
-            System.out.println("reserveList :" + reserveList);
+
         }
 
+        System.out.println("2nd : " + Arrays.toString(students));
 
-        return (int) (n - canDoPhy.stream().filter(is-> !is).findAny().stream().count());
+        return answer - (int) (Arrays.stream(students).filter(no -> no == -1).count());
     }
 
     @Override
