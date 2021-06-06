@@ -39,7 +39,40 @@ public class Victory implements BruteForce {
 
     @Override
     public int findPrimeNumber(String numbers) {
-        return 0;
+        int answer = 0;
+        List<Integer> list = new ArrayList<>();
+        if(numbers.length() >= 1 &&numbers.length() <= 7)  list = mixNumber(list,"", numbers);
+        for(int item : list) {
+            boolean isPrime = true;
+            for(int i=2; i*i<=item; i++) {
+                if(item % i == 0) {
+                    isPrime = false;
+                    break;
+                }
+            }
+            if(isPrime) {
+                answer++;
+            }
+        }
+
+        return answer;
+    }
+
+    private List<Integer> mixNumber(List<Integer> list, String prefix, String str) {
+        int pre = prefix.length() != 0 ? Integer.parseInt(prefix) : 0;
+
+        if(pre != 1 && pre != 0 && !list.contains(pre)) list.add(pre);
+
+        int n = str.length();
+        if (n == 0) {
+            if(!list.contains(pre)) list.add(pre);
+        }
+        else {
+            for (int i = 0; i < n; i++) {
+                mixNumber(list,prefix + str.charAt(i), str.substring(0, i) + str.substring(i + 1, n));
+            }
+        }
+        return list;
     }
 
     @Override
