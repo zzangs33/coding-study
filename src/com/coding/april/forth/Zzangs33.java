@@ -1,6 +1,7 @@
 package com.coding.april.forth;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class Zzangs33 implements BruteForce {
     public static void main(String[] args) {
@@ -71,11 +72,11 @@ public class Zzangs33 implements BruteForce {
             }
         }
     }
-    private boolean isPrime(int n) {
-        if (n <= 1) return false;
-        if (n == 2 || n == 3) return true;
-        for (int i = 2; i <= Math.sqrt(n); i++) if (n % i == 0) return false;
-        return true;
+
+    private boolean isPrime(int number) {
+        return number > 1
+                && IntStream.rangeClosed(2, (int) Math.sqrt(number))
+                .noneMatch(n -> (number % n == 0));
     }
 
     @Override
