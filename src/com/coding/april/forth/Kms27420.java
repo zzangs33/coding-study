@@ -1,15 +1,13 @@
 package com.coding.april.forth;
 
-import com.coding.utils.JsonUtil;
-
 import java.util.*;
 
 public class Kms27420 implements BruteForce {
     public static void main(String[] args) {
         Kms27420 instance = new Kms27420();
-//        instance.exe("virtualTest");
+        instance.exe("virtualTest");
         instance.exe("findPrimeNumber");
-//        instance.exe("carpet");
+        instance.exe("carpet");
     }
 
     @Override
@@ -31,51 +29,33 @@ public class Kms27420 implements BruteForce {
 
     @Override
     public int findPrimeNumber(String numbers) {
-        return (int) this.getAll(numbers).stream()
-                .filter(this::isPrime)
-                .count();
+        return this.findPrimeNumberSet(numbers).size();
     }
 
-    private final Map<String, Set<Integer>> cache = new HashMap<>();
+    public Set<Integer> findPrimeNumberSet(String numbers) {
+        return this.calcPrimeNumberSet(new HashSet<>(), "", numbers);
+    }
 
-    private Set<Integer> getAll(String numbers) {
-        Set<Integer> set = new HashSet<>();
-        if (numbers.length() < 2) {
-            System.out.println(JsonUtil.stringify(set));
-            set.add(this.parseInt(numbers));
-        } else {
-            for (int i = 0; i < numbers.length(); i += 1) {
-                char c = numbers.charAt(0);
-                Set<Integer> childSet = this.cache.computeIfAbsent(
-                        numbers.substring(0, i) + numbers.substring(i + 1),
-                        this::getAll
-                );
-                childSet.forEach(iNum -> {
-                    set.add(iNum);
-                    String sNum = iNum.toString();
-                    for (int idx = 0; idx <= sNum.length(); idx += 1)
-                        set.add(this.parseInt(sNum.substring(0, idx) + c + sNum.substring(idx)));
-                });
-            }
+    private Set<Integer> calcPrimeNumberSet(Set<Integer> result, String prefix, String rest) {
+        try {
+            int iValue = Integer.parseInt(prefix);
+            if (this.isPrime(iValue)) result.add(iValue);
+        } catch (NumberFormatException ignored) {
         }
-        System.out.println(JsonUtil.stringify(set));
-        return set;
-    }
-
-    private int parseInt(String num) {
-        if (num == null || num.isEmpty()) return 0;
-        while (num.length() > 0 && num.charAt(0) == '0')
-            num = num.substring(1);
-        return num.isEmpty() ? 0 : Integer.parseInt(num);
+        for (int i = 0; i < rest.length(); i += 1)
+            this.calcPrimeNumberSet(result, prefix + rest.charAt(i), rest.substring(0, i) + rest.substring(i + 1));
+        return result;
     }
 
     private final Map<Integer, Boolean> primeCache = new HashMap<>();
 
     private boolean isPrime(Integer number) {
-        return this.primeCache.computeIfAbsent(number, (num) -> {
-            for (int i = 2; i <= 3 || i < number / 3; i += 1)
-                if (number % i == 0) return false;
-            return num > 1;
+        return this.primeCache.computeIfAbsent(number, num -> {
+            if (num < 2) return false;
+            if (num < 4) return true;
+            for (int i = 2; i <= num / 2; i += 1)
+                if (num % i == 0) return false;
+            return true;
         });
     }
 
