@@ -1,14 +1,14 @@
 package com.coding.april.forth;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class Zzangs33 implements BruteForce {
     public static void main(String[] args) {
         Zzangs33 zzangs33 = new Zzangs33();
-        System.out.println(Arrays.toString(zzangs33.virtualTest(new int[]{1, 2, 3, 4, 5})));
-        System.out.println(Arrays.toString(zzangs33.virtualTest(new int[]{1, 3, 2, 4, 2})));
+        zzangs33.exe("virtualTest");
+        zzangs33.exe("findPrimeNumber");
+        zzangs33.exe("carpet");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Zzangs33 implements BruteForce {
                     if (e1.getValue() < e2.getValue()) return 1;
                     else if (e1.getValue() > e2.getValue()) return -1;
 
-                    return e1.getKey() < e2.getKey() ? -1 : 1;
+                    return Integer.compare(e1.getKey(), e2.getKey());
                 })
                 .map(Map.Entry::getKey).mapToInt(Integer::intValue).toArray();
 
@@ -49,13 +49,48 @@ public class Zzangs33 implements BruteForce {
         return rank;
     }
 
+    Set<Integer> totalNumbers = new HashSet<>();
     @Override
     public int findPrimeNumber(String numbers) {
-        return 0;
+        String[] split = numbers.split("");
+        boolean[] visited = new boolean[split.length];
+        for (int i = 1; i <= split.length; i++)
+            addNumbers(split, visited, "", i);
+
+        return totalNumbers.size();
+    }
+    private void addNumbers(String[] split, boolean[] visited, String current, int targetSize) {
+        if (current.length() == targetSize) {
+            int res = Integer.parseInt(current);
+            if (isPrime(res)) totalNumbers.add(res);
+        }
+        for (int i = 0; i < split.length; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                addNumbers(split, visited, current + split[i], targetSize);
+                visited[i] = false;
+            }
+        }
+    }
+
+    private boolean isPrime(int number) {
+        return number > 1
+                && IntStream.rangeClosed(2, (int) Math.sqrt(number))
+                .noneMatch(n -> (number % n == 0));
     }
 
     @Override
     public int[] carpet(int brown, int yellow) {
+        int result = brown + yellow;
+        List<Integer> verticals = new ArrayList<>();
+        for (int i = 1; i <= result / i; i++) {
+            if (result % i == 0) verticals.add(i);
+        }
+        for (int vert : verticals) {
+            int edge = 2 * vert + 2 * (result / vert) - 4;
+            if (edge == brown) return new int[]{result / vert, vert};
+        }
+
         return new int[0];
     }
 }
