@@ -27,10 +27,8 @@ public class Zzangs33 implements Greedy {
             boolean hasSmall = hasLost.contains(r - 1);
             boolean hasLarge = hasLost.contains(r + 1);
 
-            if (hasSmall || hasLarge) {
-                if (hasSmall) hasLost.remove(r - 1);
-                else hasLost.remove(r + 1);
-            }
+            if (hasSmall) hasLost.remove(r - 1);
+            else if (hasLarge) hasLost.remove(r + 1);
         }
 
         return n - hasLost.size();
@@ -90,7 +88,7 @@ public class Zzangs33 implements Greedy {
 
     @Override
     public String makeBigNumber(String number, int k) {
-
+        // 졸려서 포기
 
         return null;
     }
