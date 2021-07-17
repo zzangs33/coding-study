@@ -49,7 +49,7 @@ public class Victory implements Greedy {
     }
 
     @Override
-    public String makeABigNumber(String number, int k) {
+    public String makeBigNumber(String number, int k) {
         return null;
     }
 

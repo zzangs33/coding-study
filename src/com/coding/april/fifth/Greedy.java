@@ -10,7 +10,7 @@ public interface Greedy extends TestCaseExe {
 
     int joyStick(String name);
 
-    String makeABigNumber(String number, int k);
+    String makeBigNumber(String number, int k);
 
     int lifeboat(int[] people, int limit);
 

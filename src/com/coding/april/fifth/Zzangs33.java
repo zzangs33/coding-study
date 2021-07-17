@@ -89,7 +89,9 @@ public class Zzangs33 implements Greedy {
 
 
     @Override
-    public String makeABigNumber(String number, int k) {
+    public String makeBigNumber(String number, int k) {
+
+
         return null;
     }
 
