@@ -12,7 +12,9 @@
     ["JAN"],
     ["ABAAAAAAAAABB"],
     ["AAABAAA"],
-    ["BAABAAAA"]
+    ["AAABBAA"],
+    ["BAABAAAA"],
+    ["AABABAAAABB"]
   ],
   "makeABigNumber": [
     ["1924", 2],

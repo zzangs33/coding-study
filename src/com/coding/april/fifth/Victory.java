@@ -9,7 +9,7 @@ public class Victory implements Greedy {
 
     public static void main(String[] args) {
         Victory vic = new Victory();
-        vic.exe("gymSuit");
+        vic.exe("joyStick");
 //        System.out.println((int)'A');
 //        System.out.println((int)'J');
 //        System.out.println((int)'O');
@@ -52,30 +52,30 @@ public class Victory implements Greedy {
             return answer;
         }
 
-        List<Integer> list = new ArrayList<>();
+        List<Integer> notAList = new ArrayList<>();
         for(int i = 0; i<charArr.length; i++) {
-            if(charArr[i] != 'A') list.add(i);
+            if(charArr[i] != 'A') notAList.add(i);
         }
-        System.out.println("list : " + list);
+        System.out.println("notAList : " + notAList);
 
-
-
-        if(list.size() == 0) return answer;
-        if(list.size() == 1) {
-            int idx = list.get(0);
-            answer += idx;
-            answer += calculateAnswer(charArr[idx]);
+        if(notAList.size() == 0) return answer; //AAAAAA
+        if(notAList.size() == 1) { // ABAAAA
+            int idx = notAList.get(0);
+            answer += idx; // index 값 만큼 이동
+            answer += calculateAnswer(charArr[idx]); // char 계산
             return answer;
         }
 
-        answer += charArr.length - 1; // 전체 자리 이동 수
-
-        for(Integer idx : list) {
+        for(Integer idx : notAList) {
             answer += calculateAnswer(charArr[idx]);
         }
+        answer += charArr.length - 1; // 전체 자리 이동 수
+        int first = notAList.get(0);
+        int last = notAList.get(notAList.size()-1);
+        answer = answer - Math.max(first,(charArr.length - last - 1));
 
-        if(list.get(0) == 0)
-            answer = answer -  (list.get(1) - list.get(0) - 1);
+        if(first == 0)
+            answer = answer - (notAList.get(1) - first -1);
 
         return answer;
     }
