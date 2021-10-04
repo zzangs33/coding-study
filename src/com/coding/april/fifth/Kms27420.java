@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 public class Kms27420 implements Greedy {
     public static void main(String[] args) {
         Kms27420 instance = new Kms27420();
-        instance.exe("gymSuit");
-//        instance.exe("joyStick");
+//        instance.exe("gymSuit");
+        instance.exe("joyStick");
 //        instance.exe("makeABigNumber");
 //        instance.exe("lifeboat");
 //        instance.exe("linkingIslands");
@@ -43,7 +43,65 @@ public class Kms27420 implements Greedy {
 
     @Override
     public int joyStick(String name) {
-        return 0;
+        int zeroCnt = 0;
+        int[] cnts = new int[name.length()];
+        for (int i = 0; i < cnts.length; i += 1) {
+            int sub = name.charAt(i) - 'A';
+            if (sub <= 13) {
+                cnts[i] = sub;
+            } else {
+                cnts[i] = 13 - (sub % 13);
+            }
+            if (cnts[i] == 0) {
+                zeroCnt += 1;
+            }
+        }
+        int totalMove = 0;
+        int cursor = 0;
+        while (zeroCnt != name.length()) {
+            if (cnts[cursor] > 0) {
+                totalMove += cnts[cursor];
+                cnts[cursor] = 0;
+                zeroCnt += 1;
+            } else {
+                int movement = calcMovement(cursor, cnts);
+                totalMove += Math.abs(movement);
+                cursor = calcCursor(cursor, cnts, movement);
+            }
+        }
+        return totalMove;
+    }
+
+    private static int calcCursor(int current, int[] cnts, int moveCnt) {
+        int cursor = current + moveCnt;
+        while (cursor < 0 || cursor >= cnts.length) {
+            if (cursor < 0) {
+                cursor += cnts.length;
+            } else {
+                cursor -= cnts.length;
+            }
+        }
+        return cursor;
+    }
+
+    private static int calcMovement(int current, int[] cnts) {
+        int left = -1;
+        int cursor = calcCursor(current, cnts, left);
+        while (left < 0 && cnts[cursor] <= 0) {
+            cursor = calcCursor(current, cnts, --left);
+            if (cursor == current) {
+                left = 0;
+            }
+        }
+        int right = 1;
+        cursor = calcCursor(current, cnts, right);
+        while (right > 0 && cnts[cursor] <= 0) {
+            cursor = calcCursor(current, cnts, ++right);
+            if (cursor == current) {
+                right = 0;
+            }
+        }
+        return -left < right ? left : right;
     }
 
     @Override
