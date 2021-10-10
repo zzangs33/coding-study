@@ -9,8 +9,8 @@ public class Kms27420 implements Greedy {
     public static void main(String[] args) {
         Kms27420 instance = new Kms27420();
 //        instance.exe("gymSuit");
-        instance.exe("joyStick");
-//        instance.exe("makeABigNumber");
+//        instance.exe("joyStick");
+        instance.exe("makeBigNumber");
 //        instance.exe("lifeboat");
 //        instance.exe("linkingIslands");
 //        instance.exe("speedTrap");
@@ -106,7 +106,23 @@ public class Kms27420 implements Greedy {
 
     @Override
     public String makeBigNumber(String number, int k) {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < number.length(); i += 1) {
+            int rest = (number.length() - k) - builder.length();
+            if (rest > 0) {
+                boolean remove = false;
+                for (int compI = number.length() - rest; compI > i; compI -= 1) {
+                    if (number.charAt(i) < number.charAt(compI)) {
+                        remove = true;
+                        break;
+                    }
+                }
+                if (!remove) {
+                    builder.append(number.charAt(i));
+                }
+            }
+        }
+        return builder.toString();
     }
 
     @Override
