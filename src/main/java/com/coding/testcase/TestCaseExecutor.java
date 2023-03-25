@@ -32,6 +32,8 @@ public class TestCaseExecutor {
                     new NoSuchMethodException(methodName).printStackTrace();
                 } else {
                     int no = 1;
+                    System.out.println("\n--------------------------------------------------");
+                    System.out.println("The test cases of the method \"" + methodName + "\"");
                     for (List<Object> testCase : testCaseList) {
                         try {
                             new Invoker(instance, matchMethodList, testCase).invoke(no++);
@@ -39,6 +41,7 @@ public class TestCaseExecutor {
                             e.printStackTrace();
                         }
                     }
+                    System.out.println("--------------------------------------------------\n");
                 }
             }
         } catch (Exception e) {
