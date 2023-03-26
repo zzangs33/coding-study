@@ -67,21 +67,23 @@ public class TestCaseExecutor {
     }
 
     private static Map<String, List<List<Object>>> getTestCaseMap(Class<?> clz) throws IOException {
-        List<String> clzPathCandidates = new ArrayList<>();
-        TestCase testCase = clz.getDeclaredAnnotation(TestCase.class);
-        if (testCase != null) {
-            clzPathCandidates.add(testCase.value());
-        }
+        Set<String> clzPathCandidates = getTestCaseSet(clz).stream()
+                .map(TestCase::value)
+                .collect(Collectors.toSet());
         clzPathCandidates.add("./testcase.json");
+        Map<String, List<List<Object>>> result = new HashMap<>();
         for (String classPath : clzPathCandidates) {
             try (InputStream is = clz.getResourceAsStream(classPath)) {
                 if (is != null) {
-                    return getTestCaseMap(is);
+                    result.putAll(getTestCaseMap(is));
                 }
             } catch (NullPointerException ignored) {
             }
         }
-        throw new FileNotFoundException("class path list: " + clzPathCandidates);
+        if (result.isEmpty()) {
+            throw new FileNotFoundException("class path list: " + clzPathCandidates);
+        }
+        return result;
     }
 
     private static class Invoker {
@@ -127,5 +129,20 @@ public class TestCaseExecutor {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static Set<TestCase> getTestCaseSet(Object instance) {
+        if (instance != null && !(instance instanceof Class)) {
+            return getTestCaseSet(instance.getClass());
+        }
+        if (instance == null) {
+            return Collections.emptySet();
+        }
+        Set<TestCase> set = new HashSet<>();
+        set.add(((Class<?>) instance).getDeclaredAnnotation(TestCase.class));
+        for (Class<?> anInterface : ((Class<?>) instance).getInterfaces()) {
+            set.addAll(getTestCaseSet(anInterface));
+        }
+        return set.stream().filter(Objects::nonNull).collect(Collectors.toSet());
     }
 }
