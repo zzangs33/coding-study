@@ -5,6 +5,8 @@ import com.coding.testcase.TestCaseExecutor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Kms27420 implements Kakao2023, Backend {
     public static void main(String[] args) {
@@ -160,5 +162,21 @@ public class Kms27420 implements Kakao2023, Backend {
             result[rIdx++] = min;
         }
         return result;
+    }
+
+    @Override
+    public int[] lotto(int[] lottos, int[] win_nums) {
+        Set<Integer> winSet = IntStream.of(win_nums).boxed().collect(Collectors.toSet());
+        int best = 7;
+        int worst = 7;
+        for (int lotto : lottos) {
+            if (winSet.contains(lotto)) {
+                worst--;
+                best--;
+            } else if (lotto == 0) {
+                best--;
+            }
+        }
+        return new int[] {Math.min(6, best), Math.min(6, worst)};
     }
 }

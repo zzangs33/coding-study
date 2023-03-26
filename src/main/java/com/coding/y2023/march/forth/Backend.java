@@ -10,4 +10,6 @@ public interface Backend {
     int[] teethBrush(String[] enroll, String[] referral, String[] seller, int[] amount);
 
     int[] matrix(int rows, int columns, int[][] queries);
+
+    int[] lotto(int[] lottos, int[] win_nums);
 }
