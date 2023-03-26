@@ -47,7 +47,47 @@ public class Kms27420 implements Kakao2023, Backend {
 
     @Override
     public int[] binaryTree(long[] numbers) {
-        return new int[0];
+        return Arrays.stream(numbers)
+                .mapToInt(number -> isPerfectBinaryTree(toFullBinary(number), true) ? 1 : 0)
+                .toArray();
+    }
+
+    private static String toFullBinary(long number) {
+        StringBuilder result = new StringBuilder(Long.toBinaryString(number));
+        int nodeLength = 1;
+        int nodeLevelCnt = 1;
+        while (nodeLength < result.length()) {
+            nodeLevelCnt *= 2;
+            nodeLength += nodeLevelCnt;
+        }
+        int repeat = nodeLength - result.length();
+        for (int i = 0; i < repeat; i++) {
+            result.insert(0, "0");
+        }
+        return result.toString();
+    }
+
+    private static boolean isPerfectBinaryTree(String binary, boolean first) {
+        if (binary.isEmpty()) {
+            return true;
+        }
+        int root = binary.length() / 2;
+        String left = binary.substring(0, root);
+        String right = binary.substring(root + 1);
+        if (binary.charAt(root) == '0') {
+            return !first && isZeroNode(left) && isZeroNode(right);
+        }
+        return isPerfectBinaryTree(left, false) && isPerfectBinaryTree(right, false);
+    }
+
+    private static boolean isZeroNode(String binary) {
+        if (binary.isEmpty()) {
+            return true;
+        }
+        int root = binary.length() / 2;
+        String left = binary.substring(0, root);
+        String right = binary.substring(root + 1);
+        return binary.charAt(root) == '0' && isZeroNode(left) && isZeroNode(right);
     }
 
     @Override
