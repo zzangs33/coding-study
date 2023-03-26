@@ -123,6 +123,42 @@ public class Kms27420 implements Kakao2023, Backend {
 
     @Override
     public int[] matrix(int rows, int columns, int[][] queries) {
-        return new int[0];
+        int[][] matrix = new int[rows][columns];
+        int cnt = 1;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] = cnt++;
+            }
+        }
+
+        int[] result = new int[queries.length];
+        int rIdx = 0;
+        for (int[] query : queries) {
+            List<int[]> pointList = new ArrayList<>();
+            for (int col = query[1]; col <= query[3]; col++) {
+                pointList.add(new int[] {query[0] - 1, col - 1});
+            }
+            for (int row = query[0] + 1; row <= query[2] - 1; row++) {
+                pointList.add(new int[] {row - 1, query[3] - 1});
+            }
+            for (int col = query[3]; col >= query[1]; col--) {
+                pointList.add(new int[] {query[2] - 1, col - 1});
+            }
+            for (int row = query[2] - 1; row >= query[0]; row--) {
+                pointList.add(new int[] {row - 1, query[1] - 1});
+            }
+            int min = Integer.MAX_VALUE;
+            int prev = - 1;
+            for (int[] point : pointList) {
+                int cur = matrix[point[0]][point[1]];
+                if (prev > -1) {
+                    matrix[point[0]][point[1]] = prev;
+                    min = Math.min(min, prev);
+                }
+                prev = cur;
+            }
+            result[rIdx++] = min;
+        }
+        return result;
     }
 }
